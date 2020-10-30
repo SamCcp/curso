@@ -1,32 +1,77 @@
 <template>
-  <section>
-    <b-field label="Name">
-        <b-input v-model="name"></b-input>
-    </b-field>
-    <br>
-    <b-select placeholder="Select a name">
-        <option
-            v-for="option in products"
-            :value="option.id"
-            :key="option.id">
-            {{ option.user.first_name }}
-        </option>
-    </b-select>
-  </section>
+  <div>
+    <section>
+      <b-field label="Name">
+          <b-input v-model="name" @keyup.enter="addProduct" ref="productname"></b-input>
+          <!-- <input type="text" v-model="name" @keyup.enter="addProduct" /> -->
+      </b-field>
+      <button class="button is-primary" @click="addProduct">Save</button>
+    </section>
+
+    <section>
+      <tabla 
+         :columns="columnas"
+         :data="products"
+         @item="selectedProduct"
+      />
+    </section>
+  </div>
 </template>
 
 <script>
+
+import tabla from '../components/tablas.vue';
+
 export default {
   name : "products",
-  beforeCreate(){
-    //fue a la api por datos
-  }, //puedo hacer chamba antes de que exista en memoria
-  created(){}, //ya existe en memoria, pero aun no se renderiza
+  created(){ 
+    console.log("fui creado!")
+  }, //ya existe en memoria, pero aun no se renderiza
   data(){
     return {
       name : "",
-      products : []
+      selected : {},
+      products : [],
+      columnas : [
+        {
+          field : "id",
+          label : "ID",
+          numeric : true,
+          width: "40"
+        },
+        {
+          field : "name",
+          label : "Product"
+        }
+      ],
+      store : null
     }
+  },
+  methods : {
+    addProduct(){
+      let total = this.products.length +1;
+      let nuevoProd = {
+        id : total,
+        name : this.name
+      }
+      //dispatch nos permite ejecutar la logica de negocio del almacen
+      this.$store.dispatch("addProduct", nuevoProd)
+      .then( ok => {
+        this.name = "";
+        this.products.push(nuevoProd)
+      })
+      .catch( err => {
+        this.$buefy.dialog.alert(err)
+        this.$refs.productname.$el.querySelector("input").focus();
+      })
+    },
+    selectedProduct(prod){
+      console.log(prod, "desde products.vue")
+      this.name = prod.name;
+    }
+  },
+  components : {
+    tabla
   }
 }
 </script>

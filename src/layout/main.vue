@@ -1,13 +1,11 @@
 <template>
   <div>
     <b-navbar>
-      <template slot="brand">
-        <b-navbar-item>
-          <img
-            src="https://azzule.com/wp-content/uploads/2018/10/az-drk-logo.png"
-            alt="Lightweight UI components for Vue.js based on Bulma"
-          />
-        </b-navbar-item>
+      <template slot="end">
+        <b-select placeholder="Lang" @input="setUserLanguage">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+        </b-select>
       </template>
 
       <template slot="start">
@@ -19,8 +17,9 @@
         </b-navbar-item>
       </template>
     </b-navbar>
-
-    <router-view></router-view>
+    <keep-alive>
+      <router-view></router-view> <!--Aqui se pintan los componentes-->
+    </keep-alive>
   </div>
 </template>
 
@@ -32,6 +31,11 @@ export default {
       isBuefy: false,
     };
   },
+  methods : {
+    setUserLanguage(e){
+      this.$store.state.userLanguage = e;
+    }
+  }
 };
 </script>
 

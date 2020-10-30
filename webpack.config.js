@@ -2,6 +2,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
+    stats : "none",
     entry : {
         index : "./src/index.js",
         vendor : ["vue"]
@@ -44,5 +45,10 @@ module.exports = {
                 }
             }
         }
+    },
+    devServer: {
+        hot : true,
+        compress : true,
+        port : 8080
     }
 }

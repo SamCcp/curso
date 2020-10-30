@@ -1,11 +1,12 @@
 import Router from "vue-router";
 import C from '../components/micomponente.vue';
+import Home from '../pages/home.vue';
 
 var router = new Router({
   routes: [
     { 
       path: "/", 
-      component: C,
+      component: Home,
       name : "Home"
     },
     {
